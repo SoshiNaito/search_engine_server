@@ -9,6 +9,11 @@ import (
 	"net/http"
 )
 
+//Res struct
+type Res struct {
+	Ts []string
+}
+
 func main() {
 	http.HandleFunc("/", jsonhandle)
 
@@ -17,23 +22,25 @@ func main() {
 }
 
 func jsonhandle(w http.ResponseWriter, req *http.Request) {
+	m := req.URL.Query()
+	
+	bytevalue, _ := json.Marshal(m)
 
-	bytevalue, _ := json.Marshal(req.URL.Query())
+	fmt.Printf("%s\n", bytevalue)
 
-	fmt.Println(req.URL.Query())
-
-	response, err := http.Post("http://localhost:8080/", "application/json", bytes.NewBuffer(bytevalue))
+	res, err := http.Post("http://localhost:8080/", "application/json", bytes.NewBuffer(bytevalue))
 	if err != nil {
 		fmt.Println("Request error:", err)
 		return
 	}
-	fmt.Printf("[status] %d\n", response.StatusCode)
+	fmt.Printf("[status] %d\n", res.StatusCode)
 
-	defer response.Body.Close()
-	body, error := ioutil.ReadAll(response.Body)
+	defer res.Body.Close()
+	body, error := ioutil.ReadAll(res.Body)
 	if error != nil {
 		log.Fatal(error)
 	}
-	fmt.Println("[body] " + string(body))
+	sb := string(body)
+	fmt.Printf("[body] %v\n", sb)
 
 }
