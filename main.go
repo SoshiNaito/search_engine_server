@@ -16,26 +16,24 @@ type Res struct {
 
 func main() {
 	http.HandleFunc("/", jsonhandle)
-
 	http.ListenAndServe(":9080", nil)
 
 }
 
 func jsonhandle(w http.ResponseWriter, req *http.Request) {
-	m := req.URL.Query()
-	
-	bytevalue, _ := json.Marshal(m)
 
+	query := req.URL.Query()
+	bytevalue, _ := json.Marshal(query)
 	fmt.Printf("%s\n", bytevalue)
 
 	res, err := http.Post("http://localhost:8080/", "application/json", bytes.NewBuffer(bytevalue))
 	if err != nil {
-		fmt.Println("Request error:", err)
+		fmt.Println("Request error :", err)
 		return
 	}
+	defer res.Body.Close()
 	fmt.Printf("[status] %d\n", res.StatusCode)
 
-	defer res.Body.Close()
 	body, error := ioutil.ReadAll(res.Body)
 	if error != nil {
 		log.Fatal(error)
