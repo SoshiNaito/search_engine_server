@@ -4,29 +4,26 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"httpserver/pack"
 	"io/ioutil"
 	"log"
 	"net/http"
 )
 
-//Res struct
-type Res struct {
-	Ts []string
-}
-
 func main() {
-	http.HandleFunc("/", jsonhandle)
-	http.ListenAndServe(":9080", nil)
+	http.HandleFunc("/", handle)
+	http.ListenAndServe(":8000", nil)
 
 }
 
-func jsonhandle(w http.ResponseWriter, req *http.Request) {
-
+func handle(w http.ResponseWriter, req *http.Request) {
+	
 	query := req.URL.Query()
 	bytevalue, _ := json.Marshal(query)
 	fmt.Printf("%s\n", bytevalue)
 
-	res, err := http.Post("http://localhost:8080/", "application/json", bytes.NewBuffer(bytevalue))
+	bytebody := bytes.NewBuffer(bytevalue)
+	res, err := http.Post("http://localhost:8080/", "application/json", bytebody)
 	if err != nil {
 		fmt.Println("Request error :", err)
 		return
