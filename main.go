@@ -56,24 +56,5 @@ func handle(w http.ResponseWriter, req *http.Request) {
 	}
 	sb := string(body)
 	fmt.Printf("[body] %v\n", sb)
-	//fmt.Printf("%v\n", r)
-	newbytebody := bytes.NewBuffer(body)
-	secondres, err := http.Post("http://localhost:9080/", "application/json", newbytebody)
-	if err != nil {
-		fmt.Println("Request error :", err)
-		return
-	}
-	defer secondres.Body.Close()
 
-	var url interface{}
-
-	secondbody, error := ioutil.ReadAll(secondres.Body)
-	if error != nil {
-		log.Fatal(error)
-	}
-	error = json.Unmarshal(secondbody, &url)
-	if error != nil {
-		log.Fatal(error)
-	}
-	fmt.Printf("%v\n", url)
 }
