@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"httpserver/pack"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -13,11 +12,10 @@ import (
 func main() {
 	http.HandleFunc("/", handle)
 	http.ListenAndServe(":8000", nil)
-
 }
 
 func handle(w http.ResponseWriter, req *http.Request) {
-	
+	fmt.Println("pass")
 	query := req.URL.Query()
 	bytevalue, _ := json.Marshal(query)
 	fmt.Printf("%s\n", bytevalue)
