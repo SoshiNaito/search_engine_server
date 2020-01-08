@@ -50,6 +50,6 @@ func handle(w http.ResponseWriter, req *http.Request) {
 	}
 
 	sb := string(body)
-	fmt.Printf("[body] %v\n", sb)
+	fmt.Fprintf(w, "%v\n", sb)
 
 }
