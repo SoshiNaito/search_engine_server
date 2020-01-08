@@ -9,16 +9,11 @@ import (
 	"net/http"
 )
 
-//Ranking struct
-type Ranking struct {
-	Rank int
-	Res
-}
-
 //Res struct
 type Res struct {
-	ID int
+	Url string `json:"url"`
 }
+
 
 func main() {
 	http.HandleFunc("/", handle)
@@ -43,12 +38,14 @@ func handle(w http.ResponseWriter, req *http.Request) {
 	}
 	defer res.Body.Close()
 
-	var r Ranking
+	var r Res
 
 	body, error := ioutil.ReadAll(res.Body)
 	if error != nil {
 		log.Fatal(error)
 	}
+
+	fmt.Println(string(body))
 
 	error = json.Unmarshal(body, &r)
 	if error != nil {
@@ -56,5 +53,4 @@ func handle(w http.ResponseWriter, req *http.Request) {
 	}
 	sb := string(body)
 	fmt.Printf("[body] %v\n", sb)
-
 }
