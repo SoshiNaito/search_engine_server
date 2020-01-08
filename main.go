@@ -49,7 +49,7 @@ func handle(w http.ResponseWriter, req *http.Request) {
 		log.Fatal(error)
 	}
 
-	sb := string(body)
-	fmt.Fprintf(w, "%v\n", sb)
-
+	// sb := string(body)
+	// fmt.Fprintf(w, "%v\n", body)
+	w.Write(body)
 }
