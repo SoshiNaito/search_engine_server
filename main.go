@@ -10,10 +10,9 @@ import (
 )
 
 //Res struct
-type Res struct {
-	Url string `json:"url"`
+type Res []struct {
+	URL string `json:"url"`
 }
-
 
 func main() {
 	http.HandleFunc("/", handle)
@@ -29,28 +28,28 @@ func handle(w http.ResponseWriter, req *http.Request) {
 	// bytevalue, _ := json.Marshal(cquery)
 	bytevalue, _ := json.Marshal(query)
 	fmt.Printf("%s\n", bytevalue)
-
 	bufbody := bytes.NewBuffer(bytevalue)
+
 	res, err := http.Post("http://localhost:8080/", "application/json", bufbody)
 	if err != nil {
 		fmt.Println("Request error :", err)
-		return
+		// return
 	}
 	defer res.Body.Close()
 
 	var r Res
 
 	body, error := ioutil.ReadAll(res.Body)
-	if error != nil {
-		log.Fatal(error)
+	if err != nil {
+		log.Fatal(err)
 	}
-
-	fmt.Println(string(body))
 
 	error = json.Unmarshal(body, &r)
 	if error != nil {
 		log.Fatal(error)
 	}
+
 	sb := string(body)
 	fmt.Printf("[body] %v\n", sb)
+
 }
