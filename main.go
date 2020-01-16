@@ -9,11 +9,6 @@ import (
 	"net/http"
 )
 
-//Res struct
-type Res []struct {
-	URL string `json:"url"`
-}
-
 func main() {
 	http.HandleFunc("/", handle)
 	http.ListenAndServe(":8000", nil)
@@ -21,6 +16,8 @@ func main() {
 }
 
 func handle(w http.ResponseWriter, req *http.Request) {
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	query := req.URL.Query()
 	// cquery := pack.Rename("query", query)
@@ -37,17 +34,13 @@ func handle(w http.ResponseWriter, req *http.Request) {
 	}
 	defer res.Body.Close()
 
-	var r Res
-
 	body, error := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	error = json.Unmarshal(body, &r)
 	if error != nil {
 		log.Fatal(error)
 	}
+
+	fmt.Println(string(body))
 
 	// sb := string(body)
 	// fmt.Fprintf(w, "%v\n", body)
