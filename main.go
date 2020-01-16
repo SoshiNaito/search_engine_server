@@ -30,19 +30,16 @@ func handle(w http.ResponseWriter, req *http.Request) {
 	res, err := http.Post("http://localhost:8080/", "application/json", bufbody)
 	if err != nil {
 		fmt.Println("Request error :", err)
-		// return
 	}
 	defer res.Body.Close()
 
-	body, error := ioutil.ReadAll(res.Body)
+	body, err := ioutil.ReadAll(res.Body)
 
-	if error != nil {
-		log.Fatal(error)
+	if err != nil {
+		log.Println(err)
 	}
 
 	fmt.Println(string(body))
 
-	// sb := string(body)
-	// fmt.Fprintf(w, "%v\n", body)
 	w.Write(body)
 }
