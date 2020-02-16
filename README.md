@@ -1,10 +1,4 @@
 # search_engine_server
-curl 'http://localhost:8000/?q=test'
-
-
-[
-	{"url": "movie-enter-5842974.npy"}
-	{"url": "movie-enter-5842974.npy"}
-	{"url": "movie-enter-5842974.npy"}
-	{"url": "movie-enter-5842974.npy"}
-]
+1. go1.13.7をインストール
+2. 公式サイトなどを参考にGOROOTなどのpathを設定
+3. `go run main.go`で起動

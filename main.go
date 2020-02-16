@@ -3,12 +3,8 @@ package main
 import (
 	"bytes"
 	"io/ioutil"
-
-	//"bytes"
 	"encoding/json"
 	"fmt"
-
-	//"io/ioutil"
 	"net/http"
 )
 
