@@ -7,7 +7,6 @@ import (
 	//"bytes"
 	"encoding/json"
 	"fmt"
-	"time"
 
 	//"io/ioutil"
 	"net/http"
@@ -41,7 +40,6 @@ func handle(w http.ResponseWriter, req *http.Request) {
 	}
 
 	fmt.Println(string(body))
-	time.Sleep(time.Second * 1)
 
 	w.Write(body)
 }
