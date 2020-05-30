@@ -2,16 +2,15 @@ package main
 
 import (
 	"bytes"
-	"io/ioutil"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 )
 
 func main() {
 	http.HandleFunc("/", handle)
 	http.ListenAndServe(":8000", nil)
-
 }
 
 func handle(w http.ResponseWriter, req *http.Request) {
@@ -19,23 +18,22 @@ func handle(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	query := req.URL.Query()
-	bytevalue, _ := json.Marshal(query)
-	fmt.Printf("%s\n", bytevalue)
+	bytevalue, err := json.Marshal(query)
+	if err != nil {
+		fmt.Println(err)
+	}
 	bufbody := bytes.NewBuffer(bytevalue)
-
 	res, err := http.Post("http://localhost:8080/", "application/json", bufbody)
 	if err != nil {
-		fmt.Println("200 OK")
+		fmt.Println(err)
 	}
 	defer res.Body.Close()
 
-	body, error := ioutil.ReadAll(res.Body)
+	body, err := ioutil.ReadAll(res.Body)
 
-	if error != nil {
-		fmt.Println("200 OK")
+	if err != nil {
+		fmt.Println(err)
 	}
-
-	fmt.Println(string(body))
 
 	w.Write(body)
 }
