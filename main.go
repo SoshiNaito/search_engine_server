@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -14,26 +15,33 @@ func main() {
 }
 
 func handle(w http.ResponseWriter, req *http.Request) {
-
+	//CORS
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	query := req.URL.Query()
-	bytevalue, err := json.Marshal(query)
+	//受け取ったリクエストからクエリを抽出
+	getQuery := req.URL.Query()
+	queryByteValue, err := json.Marshal(getQuery)
 	if err != nil {
-		fmt.Println(err)
+		log.Println("error: GET query encode")
+		log.Fatal(err)
 	}
-	bufbody := bytes.NewBuffer(bytevalue)
-	res, err := http.Post("http://localhost:8080/", "application/json", bufbody)
+
+	//Postリクエスト
+	query := bytes.NewBuffer(queryByteValue)
+	endPoint := "/search"
+	url := fmt.Sprintf("http://localhost:8080%s", endPoint)
+	res, err := http.Post(url, "application/json", query)
 	if err != nil {
-		fmt.Println(err)
+		log.Println("error: POST request")
+		log.Fatal(err)
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
-
+	//レスポンスの読み取り
+	resValue, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		fmt.Println(err)
+		log.Println("error: response encode")
+		log.Fatal(err)
 	}
-
-	w.Write(body)
+	w.Write(resValue)
 }
